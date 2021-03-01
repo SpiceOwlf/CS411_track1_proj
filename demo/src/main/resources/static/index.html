@@ -5,20 +5,30 @@
     <title>springboot Test skeleton</title>
 </head>
 <body>
-<p><a href="/hello">Greet the world!</a></p>
+<form action="/add" method="POST">
+    <p>Let's add a customer.</p>
 
-<form action="/hello" method="GET" id="nameForm">
     <div>
-        <label for="nameField">How should the app call you?</label>
-        <input name="myName" id="nameField">
-<!--        <input name="myName2" id="nameField2">-->
-        <button>Greet me!</button>
+        <label for="firstName">First name:</label>
+        <input name="first" id="firstName" value="Homer">
     </div>
     <div>
-        <h3>
-            Some Text here
-        </h3>
+        <label for="lastName">Last name:</label>
+        <input name="last" id="lastName" value="Simpson">
+    </div>
+    <div>
+        <button>Add customer</button>
     </div>
 </form>
+
+
+
+<form action="/list" method="GET">
+    <button>List customers</button>
+</form>
+
+<div>
+    <button>random button</button>
+</div>
 </body>
 </html>
