@@ -13,7 +13,9 @@ API = '7e45caeda7d2dc2d9ff2a41f2ea543fd'
 def get_url(url):
     payload = {'api_key': API, 'url': url, 'country_code': 'us'}
     proxy_url = 'http://api.scraperapi.com/?' + urlencode(payload)
-    return proxy_url
+    print(proxy_url,"proxy_url")
+    # return proxy_url
+    return url
 
 class AmazonSpider(scrapy.Spider):
     name = 'amazon'
