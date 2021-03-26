@@ -20,8 +20,8 @@ NEWSPIDER_MODULE = 'amazon_scraper.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 5
-RETRY_TIMES = 5
+CONCURRENT_REQUESTS = 2
+RETRY_TIMES = 3
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
