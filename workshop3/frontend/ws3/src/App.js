@@ -1,23 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState, useEffect} from "react";
+import Axios from 'axios';
 
 function App() {
+  const [name, setCafeName] = useState('');
+  const [addr, setAddr] = useState('');
+  const [license, setLicense] = useState('');
+
+  const submitCafe = () => {
+    Axios.post('http://localhost:3002/api/insert', {
+      name: name,
+      addr: addr,
+      license: license
+    }).then(() => {
+      alert('successful insertion!')
+    })
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Cafe Shop Example</h1>
+
+      <div className="form">
+        <label> Cafe Name: </label>
+        <input type="text" name="name" onChange={(e) =>
+          {setCafeName(e.target.value)}
+        }/>
+        <label> Address: </label>
+        <input type="text" name="addr" onChange={(e) =>
+          {setAddr(e.target.value)}
+        }/>
+        <label> License: </label>
+        <input type="text" name="license" onChange={(e) =>
+          {setLicense(e.target.value)}
+        }/>
+
+        <button onClick={submitCafe}> Submit </button>
+      </div>
+
     </div>
   );
 }
