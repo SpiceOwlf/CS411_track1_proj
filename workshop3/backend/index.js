@@ -6,21 +6,9 @@ const mysql = require("mysql");
 const cors = require("cors");
 
 var db = mysql.createConnection({
-<<<<<<< HEAD
-<<<<<<< HEAD
     host: 'ip',
     user: 'root',
     password: 'pw',
-=======
-    host: '35.184.123.230',
-    user: 'root',
-    password: '123456',
->>>>>>> acb1964... connect to db
-=======
-    host: 'ip',
-    user: 'root',
-    password: 'pw',
->>>>>>> 37e23ce... connect to db
     database: 'pt1team25'
 })
 
