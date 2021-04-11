@@ -6,9 +6,9 @@ const mysql = require("mysql");
 const cors = require("cors");
 
 var db = mysql.createConnection({
-    host: 'ip',
+    host: '35.184.123.230',
     user: 'root',
-    password: 'pw',
+    password: '123456',
     database: 'pt1team25'
 })
 
@@ -31,6 +31,38 @@ app.get("/api/get/:productName", (require, response) => {
     })
 });
 
+app.post("/api/insert", (require, response) => {
+    const productName = require.body.productName;
+    const leftInStock = require.body.leftInStock;
+    const productPrice = require.body.productPrice;
+
+    const sqlInsert = "INSERT INTO Product (product_name, Left_in_stock, product_price) VALUES (?,?,?)";
+    db.query(sqlInsert, [productName, leftInStock, productPrice], (err, result) => {
+        console.log(error);
+    })
+});
+
+app.post("/api/insert", (require, response) => {
+    const productName = require.body.productName;
+    const leftInStock = require.body.leftInStock;
+    const productPrice = require.body.productPrice;
+
+    const sqlInsert = "INSERT INTO Product (product_name, Left_in_stock, product_price) VALUES (?,?,?)";
+    db.query(sqlInsert, [productName, leftInStock, productPrice], (err, result) => {
+        console.log(error);
+    })
+});
+
+app.put("/api/update/", (require, response) => {
+    const productName = require.body.productName;
+    const leftInStock = require.body.leftInStock;
+
+    const sqlUpdate = "UPDATE Product SET Left_in_stock = ? WHERE product_name = ?";
+    db.query(sqlUpdate, [leftInStock, productName], (err, result) => {
+        if (err) 
+        console.log(error);
+    })
+});
 
 app.listen(3002, () => {
     console.log("running on port 3002");
