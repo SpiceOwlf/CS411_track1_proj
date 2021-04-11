@@ -61,8 +61,10 @@ app.put("/api/update/", (require, response) => {
     const cafeName = require.body.name;
     const cafeAddr = require.body.addr;
     // const license = require.body.license;
-
-    const sqlUpdate = "UPDATE `Cafe` SET `address` = ? WHERE `name`= ?";
+    console.log("cafeName is   "+cafeName);
+    console.log("cafeAddr is   "+ cafeAddr);
+    
+    const sqlUpdate = "UPDATE `Cafe` SET `addr` = ? WHERE `name`= ?";
     db.query(sqlUpdate, [cafeAddr,cafeName ], (err, result) => {
         if (err) 
         console.log(err);
