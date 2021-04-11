@@ -6,8 +6,18 @@ function App() {
   const [name, setCafeName] = useState('');
   const [addr, setAddr] = useState('');
   const [license, setLicense] = useState('');
+  const [cafeReviewList, setCafeReviewList] = useState([]);
+  const [newAddr, setNewAddr] = useState("");
+  const [newlicense, setlicense] = useState("");
+
+  useEffect(() => {
+    Axios.get('http://localhost:3002/api/get').then((response) => {
+        setCafeReviewList(response.data)
+    })
+  },[])
 
   const submitCafe = () => {
+    console.log(name, addr, license);
     Axios.post('http://localhost:3002/api/insert', {
       name: name,
       addr: addr,
@@ -15,7 +25,31 @@ function App() {
     }).then(() => {
       alert('successful insertion!')
     })
+    
+    
+    setCafeReviewList([
+        ...cafeReviewList,
+        {
+            name: name,
+            addr: addr,
+            license: license
+        },
+      ]);  
+};
+
+const deleteCafe = (name) => {
+    Axios.delete(`http://localhost:3002/api/delete/${name}`);
   };
+
+  const updateAddr = (name) => {
+    Axios.put(`http://localhost:3002/api/update`, {
+        name: name,
+        addr: newAddr
+    });
+    setNewAddr("")
+  };
+
+
 
   return (
     <div className="App">
@@ -36,6 +70,29 @@ function App() {
         }/>
 
         <button onClick={submitCafe}> Submit </button>
+
+
+
+        {cafeReviewList.map((val) => {
+          return (
+            <div className = "card">
+              <h5> name: {val.name} </h5>
+              <p> address: {val.addr} </p>
+              <p> license: {val.license} </p>
+              <button onClick={() => { deleteCafe(val.name) }}> Delete</button>
+              <input type="text" id="updateInput" onChange={(e) => {
+                setNewAddr(e.target.value)
+              } }/>
+              <button onClick={() => {
+                updateAddr(val.name)
+              }}> Update</button>
+              </div>
+          );
+          
+          ;
+        })}
+
+
       </div>
 
     </div>

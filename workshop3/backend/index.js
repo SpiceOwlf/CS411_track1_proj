@@ -18,12 +18,22 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 
-app.get('/', (require, response) => {
-    const sqlselect = "SELECT * FROM Cafe"
-    db.query(sqlselect, (err, result) => {
+// app.get('/', (require, response) => {
+//     const sqlselect = "SELECT * FROM Cafe"
+//     db.query(sqlselect, (err, result) => {
+//         response.send(result);
+//     })
+// })
+
+
+app.get("/api/get", (require, response) => {
+    const sqlSelect = "SELECT * FROM Cafe";
+    db.query(sqlSelect, (err, result) => {
         response.send(result);
-    })
-})
+    });
+});
+
+
 
 app.post('/api/insert', (require, response) => {
     const name = require.body.name;
@@ -34,6 +44,29 @@ app.post('/api/insert', (require, response) => {
     db.query(sqlInsert, [name, addr, license], (err, result) => {
         console.log(err);
     });
+});
+
+app.delete("/api/delete/:name", (require, response) => {
+    const cafeName = require.params.name;
+    console.log("cafeName is    "+ cafeName);
+    const sqlDelete = "DELETE FROM Cafe WHERE name = ?";
+    db.query(sqlDelete, cafeName, (err, result) => {
+        if (err) 
+        console.log(err);
+    })
+});
+
+
+app.put("/api/update/", (require, response) => {
+    const cafeName = require.body.name;
+    const cafeAddr = require.body.addr;
+    // const license = require.body.license;
+
+    const sqlUpdate = "UPDATE `Cafe` SET `address` = ? WHERE `name`= ?";
+    db.query(sqlUpdate, [cafeAddr,cafeName ], (err, result) => {
+        if (err) 
+        console.log(err);
+    })
 });
 
 app.listen(3002, () =>{
