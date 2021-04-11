@@ -31,25 +31,28 @@ app.get("/api/get/:productName", (require, response) => {
     })
 });
 
-app.post("/api/insert", (require, response) => {
-    const productName = require.body.productName;
-    const leftInStock = require.body.leftInStock;
-    const productPrice = require.body.productPrice;
+app.delete("/api/delete/:productName", (require, response) => {
+    const productName = require.params.productName;
 
-    const sqlInsert = "INSERT INTO Product (product_name, Left_in_stock, product_price) VALUES (?,?,?)";
-    db.query(sqlInsert, [productName, leftInStock, productPrice], (err, result) => {
+    const sqlDelete = "DELETE FROM Product WHERE product_name = ?";
+    db.query(sqlDelete, productName, (err, result) => {
+        if (err) 
         console.log(error);
     })
 });
 
-app.post("/api/insert", (require, response) => {
+app.post("/api/insert/", (require, response) => {
+    console.log("inserting");
     const productName = require.body.productName;
     const leftInStock = require.body.leftInStock;
     const productPrice = require.body.productPrice;
-
-    const sqlInsert = "INSERT INTO Product (product_name, Left_in_stock, product_price) VALUES (?,?,?)";
-    db.query(sqlInsert, [productName, leftInStock, productPrice], (err, result) => {
-        console.log(error);
+    const website = require.body.website;
+    console.log(productName, leftInStock, productPrice);
+    const sqlInsert = "INSERT INTO Product (product_id, product_name, Left_in_stock, product_price, website_id) VALUES (?,?,?,?,?)";
+    db.query(sqlInsert, [productName, productName, leftInStock, productPrice, website], (err, result) => {
+        console.log(err);
+        console.log(result);
+        console.log(productName);
     })
 });
 
