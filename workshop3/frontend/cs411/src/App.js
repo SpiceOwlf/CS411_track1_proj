@@ -10,6 +10,8 @@ function App() {
   const [website, setWebsite] = useState('');
   const [newLeftInStock, setNewLeftInStock] = useState('');
   const [newProductName, setNewProductName] = useState('');
+  const [user, setUser] = useState('');
+  const [userData, setUserData] = useState([]);
 
   const getProduct = (productName) => {
     Axios.get(`http://localhost:3002/api/get/${productName}`).then((response) => {
@@ -37,6 +39,12 @@ function App() {
       website: website
     }).then(() => {
       alert('successful insertion!')
+    });
+  };
+
+  const getUserData = (user) => {
+    Axios.get(`http://localhost:3002/api/advanced/${user}`).then((response) => {
+      setUserData(response.data)
     });
   };
 
@@ -85,6 +93,24 @@ function App() {
           setWebsite(e.target.value)
       }}/>
       <button onClick={() => { insertProduct() }}> Insert</button>
+      </div>
+
+      <div>
+      <h2> advanced query </h2>
+      <label> User ID: </label>
+        <input type="text" id="user_id" onChange={(e) => {
+          setUser(e.target.value)
+        }}/>
+      
+      <button onClick={ getUserData(user) }> Submit </button>
+      {userData.map((val) => {
+          return (
+            <div className = "card2">
+              <p>Product Name: {val.product_name} </p>
+              <p>Add Date: {val.add_date}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -51,8 +51,6 @@ app.post("/api/insert/", (require, response) => {
     const sqlInsert = "INSERT INTO Product (product_id, product_name, Left_in_stock, product_price, website_id) VALUES (?,?,?,?,?)";
     db.query(sqlInsert, [productName, productName, leftInStock, productPrice, website], (err, result) => {
         console.log(err);
-        console.log(result);
-        console.log(productName);
     })
 });
 
@@ -66,6 +64,19 @@ app.put("/api/update/", (require, response) => {
         console.log(error);
     })
 });
+
+app.get("/api/advanced/:userId", (require, response) => {
+    const userId = require.params.userId;
+    console.log(userId);
+    const sqlSelect = "SELECT user_id, product_name, add_date FROM (SELECT * FROM User NATURAL JOIN Contains NATURAL JOIN Product) as wish WHERE user_id = ? AND add_date IN (SELECT MAX(add_date) FROM (SELECT * FROM User NATURAL JOIN Contains NATURAL JOIN Product) as wish1)";
+    db.query(sqlSelect, [userId], (err, result) => {
+        response.send(result);
+    })
+});
+
+
+
+
 
 app.listen(3002, () => {
     console.log("running on port 3002");
