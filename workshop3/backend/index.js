@@ -25,17 +25,18 @@ app.use(express.json());
 
 app.get("/api/get/:productName", (require, response) => {
     const productName = require.params.productName;
-    const sqlSelect = "SELECT * FROM Product WHERE product_name = ?";
+    const sqlSelect = "SELECT product_id, product_name, Left_in_stock, product_price, website_name FROM Product natural join Website WHERE product_name = ?";
     db.query(sqlSelect, [productName], (err, result) => {
         response.send(result);
     })
 });
 
-app.delete("/api/delete/:productName", (require, response) => {
-    const productName = require.params.productName;
+app.delete("/api/delete/:productId", (require, response) => {
+    const productId = require.params.productId;
 
-    const sqlDelete = "DELETE FROM Product WHERE product_name = ?";
-    db.query(sqlDelete, productName, (err, result) => {
+    const sqlDelete = "DELETE FROM Product WHERE product_id = ?";
+    db.query(sqlDelete, productId, (err, result) => {
+        console.log(productId);
         if (err) 
         console.log(error);
     })
@@ -43,23 +44,25 @@ app.delete("/api/delete/:productName", (require, response) => {
 
 app.post("/api/insert/", (require, response) => {
     console.log("inserting");
+    const productId = require.body.productId;
     const productName = require.body.productName;
     const leftInStock = require.body.leftInStock;
     const productPrice = require.body.productPrice;
     const website = require.body.website;
     console.log(productName, leftInStock, productPrice);
     const sqlInsert = "INSERT INTO Product (product_id, product_name, Left_in_stock, product_price, website_id) VALUES (?,?,?,?,?)";
-    db.query(sqlInsert, [productName, productName, leftInStock, productPrice, website], (err, result) => {
+    db.query(sqlInsert, [productId, productName, leftInStock, productPrice, website], (err, result) => {
         console.log(err);
     })
 });
 
 app.put("/api/update/", (require, response) => {
-    const productName = require.body.productName;
+    const productId = require.body.productId;
     const leftInStock = require.body.leftInStock;
 
-    const sqlUpdate = "UPDATE Product SET Left_in_stock = ? WHERE product_name = ?";
-    db.query(sqlUpdate, [leftInStock, productName], (err, result) => {
+    const sqlUpdate = "UPDATE Product SET Left_in_stock = ? WHERE product_id = ?";
+    db.query(sqlUpdate, [leftInStock, productId], (err, result) => {
+        console.log(productId);
         if (err) 
         console.log(error);
     })

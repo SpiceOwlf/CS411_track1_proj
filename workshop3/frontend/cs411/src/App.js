@@ -4,6 +4,7 @@ import Axios from 'axios';
 
 function App() {
   const [productName, setProductName] = useState('');
+  const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
   const [leftInStock, setLeftInStock] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -19,13 +20,13 @@ function App() {
     });
   };
 
-  const deleteProduct = (productName) => {
-    Axios.delete(`http://localhost:3002/api/delete/${productName}`);
+  const deleteProduct = (productId) => {
+    Axios.delete(`http://localhost:3002/api/delete/${productId}`);
   };
 
-  const updateStock = (productName) => {
+  const updateStock = (productId) => {
     Axios.put(`http://localhost:3002/api/update`, {
-      productName: productName,
+      productId: productId,
       leftInStock: newLeftInStock
     });
     setNewLeftInStock("")
@@ -33,6 +34,7 @@ function App() {
 
   const insertProduct = () => {
     Axios.post(`http://localhost:3002/api/insert`, {
+      productId: productId,
       productName: newProductName,
       leftInStock: leftInStock,
       productPrice: productPrice,
@@ -61,21 +63,25 @@ function App() {
         {productData.map((val) => {
           return (
             <div className = "card">
-              <h1>Product Name: {val.product_name} </h1>
+              <h3>Product Name: {val.product_name} </h3>
               <p>Left In Stock: {val.Left_in_stock}</p>
               <p>Product Price: {val.product_price}</p>
-              <p>Website ID: {val.website_id}</p>
-              <button onClick={() => { deleteProduct(val.product_name) }}> Delete Product</button>
+              <p>Website: {val.website_name}</p>
+              <button onClick={() => { deleteProduct(val.product_id) }}> Delete Product</button>
               <input type="text" id="updateLeftInStock" onChange={(e) => {
                 setNewLeftInStock(e.target.value)
               } }/>
-              <button onClick={() => { updateStock(val.product_name) }}> Update Left In Stock</button>
+              <button onClick={() => { updateStock(val.product_id) }}> Update Left In Stock</button>
             </div>
           );
         })}
       </div>
       <div>
       <h2> insert </h2>
+      <label> Product ID: </label>
+        <input type="text" id="insertProductId" onChange={(e) => {
+          setProductId(e.target.value)
+        }}/>
       <label> Product Name: </label>
         <input type="text" id="insertProductName" onChange={(e) => {
           setNewProductName(e.target.value)
@@ -96,17 +102,17 @@ function App() {
       </div>
 
       <div>
-      <h2> advanced query </h2>
+      <h2> last items added to user's wishlist </h2>
       <label> User ID: </label>
         <input type="text" id="user_id" onChange={(e) => {
           setUser(e.target.value)
         }}/>
       
-      <button onClick={ getUserData(user) }> Submit </button>
+      <button onClick={ () => {getUserData(user)} }> Submit </button>
       {userData.map((val) => {
           return (
             <div className = "card2">
-              <p>Product Name: {val.product_name} </p>
+              <h3>Product Name: {val.product_name} </h3>
               <p>Add Date: {val.add_date}</p>
             </div>
           );
