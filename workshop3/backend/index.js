@@ -10,7 +10,7 @@ var db = mysql.createConnection(
         host: '35.184.123.230',
         user: 'root',
         password: '123456',
-        database: 'cafeshopes'
+        database: 'pt1team25'
     }
 );
 
@@ -27,30 +27,66 @@ app.use(express.json());
 
 
 app.get("/api/get", (require, response) => {
-    const sqlSelect = "SELECT * FROM Cafe";
+    const sqlSelect = "SELECT * FROM User";
     db.query(sqlSelect, (err, result) => {
+        response.send(result);
+    });
+});
+
+app.get('/api/search_user_id', (require, response) => {
+    const user_id = require.query.user_id;
+    console.log("backend search userId is: "+ user_id);
+
+
+    const sqlSelect = "SELECT * FROM User WHERE User.user_id = ?";
+    db.query(sqlSelect, [user_id], (err, result) => {
+        console.log(result);
+        console.log(err);
         response.send(result);
     });
 });
 
 
 
+app.get('/api/advanced_query', (require, response) => {
+    // const user_id = require.query.user_id;
+    console.log("backend advanced_query ");
+
+
+    const sqlSelect = 'SELECT user_id, product_name, MIN(product_price) as product_p ' +
+    'FROM (SELECT * FROM User NATURAL JOIN Contains NATURAL JOIN Product) as newTable ' + 
+    'GROUP BY user_id, product_name ' +
+    'ORDER BY user_id '+
+    'LIMIT 15;';
+
+    db.query(sqlSelect, (err, result) => {
+        console.log(result);
+        console.log(err);
+        response.send(result);
+    });
+});
+
+
 app.post('/api/insert', (require, response) => {
-    const name = require.body.name;
-    const addr = require.body.addr;
-    const license = require.body.license;
-    console.log(name, addr, license);
-    const sqlInsert = "INSERT INTO Cafe (name, addr, license) VALUES (?,?,?)";
-    db.query(sqlInsert, [name, addr, license], (err, result) => {
+    const userId = require.body.user_id;
+    const username = require.body.username;
+    const password = require.body.password;
+    const phoneNumber = require.body.phone_num;
+    const email = require.body.email;
+
+    
+    console.log(username, password, phoneNumber, email);
+    const sqlInsert = "INSERT INTO User (user_id, username, password, phone_num, email) VALUES (?,?,?,?,?)";
+    db.query(sqlInsert, [userId,username, password, phoneNumber,email], (err, result) => {
         console.log(err);
     });
 });
 
-app.delete("/api/delete/:name", (require, response) => {
-    const cafeName = require.params.name;
-    console.log("cafeName is    "+ cafeName);
-    const sqlDelete = "DELETE FROM Cafe WHERE name = ?";
-    db.query(sqlDelete, cafeName, (err, result) => {
+app.delete("/api/delete/:user_id", (require, response) => {
+    const userId = require.params.user_id;
+    console.log("userId is    "+ userId);
+    const sqlDelete = "DELETE FROM User WHERE user_id = ?";
+    db.query(sqlDelete, userId, (err, result) => {
         if (err) 
         console.log(err);
     })
@@ -58,14 +94,14 @@ app.delete("/api/delete/:name", (require, response) => {
 
 
 app.put("/api/update/", (require, response) => {
-    const cafeName = require.body.name;
-    const cafeAddr = require.body.addr;
+    const user_id = require.body.user_id;
+    const newpassword = require.body.password;
     // const license = require.body.license;
-    console.log("cafeName is   "+cafeName);
-    console.log("cafeAddr is   "+ cafeAddr);
+    console.log("user_id is   "+ user_id);
+    console.log("newpassword is   "+ newpassword);
     
-    const sqlUpdate = "UPDATE `Cafe` SET `addr` = ? WHERE `name`= ?";
-    db.query(sqlUpdate, [cafeAddr,cafeName ], (err, result) => {
+    const sqlUpdate = "UPDATE `User` SET `password` = ? WHERE `user_id`= ?";
+    db.query(sqlUpdate, [newpassword,user_id ], (err, result) => {
         if (err) 
         console.log(err);
     })

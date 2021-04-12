@@ -3,89 +3,191 @@ import React, {useState, useEffect} from "react";
 import Axios from 'axios';
 
 function App() {
-  const [name, setCafeName] = useState('');
-  const [addr, setAddr] = useState('');
-  const [license, setLicense] = useState('');
-  const [cafeReviewList, setCafeReviewList] = useState([]);
-  const [newAddr, setNewAddr] = useState("");
-  const [newlicense, setlicense] = useState("");
+
+  const [user_id, setUserId] = useState('');
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone_num, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [userReviewList, setUserReviewList] = useState([]);
+  const [displayUserIdSearchList, setdisplayUserIdSearchList] = useState([]);
+  const [newPassword, setNewPassword] = useState("");
+  const [advancedQueryList, setadvancedQueryList] = useState([]);
+
+//   const [newphoneNumber, setlicense] = useState("");
+//   const [newemail, setlicense] = useState("");
 
   useEffect(() => {
     Axios.get('http://localhost:3002/api/get').then((response) => {
-        setCafeReviewList(response.data)
+    console.log("setUserReviewList response, "+ response);      
+    setUserReviewList(response.data)
     })
   },[])
 
-  const submitCafe = () => {
-    console.log(name, addr, license);
+  const advanced_query_button = () =>{
+    Axios.get('http://localhost:3002/api/advanced_query', {
+        // params:{
+        //     user_id: user_id
+        // }
+        
+    }).then((response) => {
+        // console.log("advanced_query response.data:  "+ response.data);
+        setadvancedQueryList(response.data)
+      });
+  }
+
+
+  const SearchUserId = () =>{
+    console.log("db user_id is  " + user_id);
+    Axios.get('http://localhost:3002/api/search_user_id', {
+        params:{
+            user_id: user_id
+        }
+        
+    }).then((response) => {
+        console.log("response.data:  "+ response.data);
+        setdisplayUserIdSearchList(response.data)
+      });
+  }
+
+
+  const submitUser = () => {
+    console.log(user_id,username, password, phone_num, email);
+
     Axios.post('http://localhost:3002/api/insert', {
-      name: name,
-      addr: addr,
-      license: license
+      user_id: user_id,
+      username: username,
+      password: password,
+      phone_num: phone_num,
+      email: email
     }).then(() => {
       alert('successful insertion!')
     })
     
-    
-    setCafeReviewList([
-        ...cafeReviewList,
+    setUserReviewList([
+        ...userReviewList,
         {
-            name: name,
-            addr: addr,
-            license: license
+            user_id: user_id,
+            username: username,
+            password: password,
+            phone_num: phone_num,
+            email: email
         },
       ]);  
 };
 
-const deleteCafe = (name) => {
-    Axios.delete(`http://localhost:3002/api/delete/${name}`);
-  };
+    const deleteUser = (user_id) => {
+        Axios.delete(`http://localhost:3002/api/delete/${user_id}`);
+    };
 
-  const updateAddr = (name) => {
+  const updatePassword = (user_id) => {
+      console.log("user_id is  " + user_id);
+      console.log("password is  " + newPassword);
+
     Axios.put(`http://localhost:3002/api/update`, {
-        name: name,
-        addr: newAddr
+        user_id: user_id,
+        password: newPassword
     });
-    setNewAddr("")
+    setNewPassword(newPassword);
   };
-
+  
 
 
   return (
     <div className="App">
-      <h1>Cafe Shop Example</h1>
+      <h1>Team25 demo</h1>
 
       <div className="form">
-        <label> Cafe Name: </label>
-        <input type="text" name="name" onChange={(e) =>
-          {setCafeName(e.target.value)}
-        }/>
-        <label> Address: </label>
-        <input type="text" name="addr" onChange={(e) =>
-          {setAddr(e.target.value)}
-        }/>
-        <label> License: </label>
-        <input type="text" name="license" onChange={(e) =>
-          {setLicense(e.target.value)}
-        }/>
-
-        <button onClick={submitCafe}> Submit </button>
-
-
-
-        {cafeReviewList.map((val) => {
+      <label> Search UserId: </label>
+        <input type="text" name="user_id" onChange={(e) =>
+            {setUserId(e.target.value)}
+            }/>
+        <button onClick={SearchUserId}> Search </button>
+        {displayUserIdSearchList.map((val) => {
           return (
             <div className = "card">
-              <h5> name: {val.name} </h5>
-              <p> address: {val.addr} </p>
-              <p> license: {val.license} </p>
-              <button onClick={() => { deleteCafe(val.name) }}> Delete</button>
-              <input type="text" id="updateInput" onChange={(e) => {
-                setNewAddr(e.target.value)
+              <h5> userId: {val.user_id} </h5>              
+              <p> username: {val.username} </p>
+              <p> password: {val.password} </p>
+              <p> phoneNumber: {val.phone_num} </p>
+              <p> email: {val.email} </p>
+              </div>
+          );
+          
+          ;
+        })}
+
+        <label> Advanced Query: </label>
+
+        <button onClick={advanced_query_button}> check </button>
+        {
+            advancedQueryList.map((val) =>{
+                console.log(val);
+                return (
+                    <div className = "card">
+                      <h5> userId: {val.user_id} </h5>              
+                      <p> product_name: {val.product_name} </p>   
+                      <p> Min product_p: {val.product_p} </p>
+                      </div>
+                  );
+            })
+        }
+
+
+
+        <label> UserId: </label>
+        <input type="text" name="user_id" onChange={(e) =>
+            {setUserId(e.target.value)}
+            }/>
+        <label> Username: </label>
+
+        <input type="text" name="username" onChange={(e) =>
+          {setUserName(e.target.value)}
+        }/>
+        <label> Password: </label>
+        <input type="text" name="password" onChange={(e) =>
+          {setPassword(e.target.value)}
+        }/>
+        <label> Phone Number: </label>
+        <input type="text" name="phone_num" onChange={(e) =>
+          {setPhoneNumber(e.target.value)}
+        }/>
+        <label> Email: </label>
+        <input type="text" name="email" onChange={(e) =>
+          {setEmail(e.target.value)}
+        }/>
+
+        <button onClick={submitUser}> Submit </button>
+
+
+
+
+
+
+        {userReviewList.map((val) => {
+          return (
+            <div className = "card">
+              <h5> userId: {val.user_id} </h5>              
+              <p> username: {val.username} </p>
+              <p> password: {val.password} </p>
+              <p> phoneNumber: {val.phone_num} </p>
+              <p> email: {val.email} </p>
+
+              
+              <button onClick={() => { deleteUser(val.user_id) }}> Delete</button>
+              
+              <input type="text" id="newpassword" onChange={(e) => {
+                //   console.log("lalalalalalaa"+e.target.value);
+                    setNewPassword(e.target.value)
+
               } }/>
+
+
               <button onClick={() => {
-                updateAddr(val.name)
+                updatePassword(val.user_id)
               }}> Update</button>
+
+
               </div>
           );
           
