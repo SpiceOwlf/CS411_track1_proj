@@ -36,6 +36,7 @@ app.delete("/api/delete/:productId", (require, response) => {
 
     const sqlDelete = "DELETE FROM Product WHERE product_id = ?";
     db.query(sqlDelete, productId, (err, result) => {
+        console.log("deleting");
         console.log(productId);
         if (err) 
         console.log(error);
@@ -62,15 +63,13 @@ app.put("/api/update/", (require, response) => {
 
     const sqlUpdate = "UPDATE Product SET Left_in_stock = ? WHERE product_id = ?";
     db.query(sqlUpdate, [leftInStock, productId], (err, result) => {
+        console.log("updating");
         console.log(productId);
-        if (err) 
-        console.log(error);
     })
 });
 
 app.get("/api/advanced/:userId", (require, response) => {
     const userId = require.params.userId;
-    console.log(userId);
     const sqlSelect = "SELECT user_id, product_name, add_date FROM (SELECT * FROM User NATURAL JOIN Contains NATURAL JOIN Product) as wish WHERE user_id = ? AND add_date IN (SELECT MAX(add_date) FROM (SELECT * FROM User NATURAL JOIN Contains NATURAL JOIN Product) as wish1)";
     db.query(sqlSelect, [userId], (err, result) => {
         response.send(result);

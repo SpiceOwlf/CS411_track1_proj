@@ -52,7 +52,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1> CRUD APPLICATIONS </h1>
+      <h1> CRUD for Product table </h1>
       <h2> search </h2>
       <div className="form">
         <label> Product Name: </label>
