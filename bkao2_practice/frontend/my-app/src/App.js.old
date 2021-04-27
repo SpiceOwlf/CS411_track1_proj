@@ -1,0 +1,166 @@
+//import logo from './logo.svg';
+import './App.css';
+import React, {useState, useEffect} from "react";
+import Axios from 'axios';
+import Main from './Main'
+
+function App() {
+  const [wid, setWid] = useState('');
+  const [wname, setWname] = useState('');
+  const [wurl, setWurl] = useState('');
+  const [websiteList, setWebsiteList] = useState([]);
+  const [newWname, setNewWname] = useState("");
+  const [newWurl, setNewWurl] = useState("");
+  const [pagenum, setPagenum] = useState(1);
+  const pageiter = 20;
+  const [maxpage, setMaxpage] = useState(1);
+
+  useEffect(() => {
+    /*
+    Axios.get(`http://localhost:3002/api/get/`).then((response) => {
+        setCustomerList(response.data);
+        setMaxpage(Math.ceil(response.data.length/pageiter));
+    });
+    */
+    setMaxpage(Math.ceil(websiteList.length/pageiter));
+    if (maxpage<pagenum) setPagenum(1);
+    document.getElementById("pagenum").value=pagenum;
+    //console.log("a=",maxpage);
+    //console.log("b=",pagenum);
+  },[maxpage,pagenum,websiteList])
+
+  const submitInsert = () => {
+      Axios.post('http://localhost:3002/api/insert', {
+          wid: wid,
+          wname: wname,
+          wurl: wurl
+      }).then(() => {
+          alert('Insert successful!');
+      });
+
+      setWebsiteList([
+        ...websiteList,
+        {
+            website_id: wid,
+            numProd: 0,
+            website_name: wname,
+            website_url: wurl
+        },
+      ]);
+      window.location = window.location;
+  };
+
+  const submitSearch = () => {
+      Axios.get(`http://localhost:3002/api/search`, {
+          params: {
+            wid: wid,
+            wname: wname,
+            wurl: wurl
+          }
+      }).then((response) => {
+          setWebsiteList(response.data);
+          //console.log("m=",response.data);
+      });
+      //window.location = window.location;
+  };
+
+  window.onload = function() {
+    submitSearch();
+  }
+
+  const deleteWebsite = (wid) => {
+    Axios.delete(`http://localhost:3002/api/delete/${wid}`);
+    window.location = window.location;
+  };
+
+  const updateWebsite = (wid) => {
+    Axios.put(`http://localhost:3002/api/update`, {
+        wid: wid,
+        wname: newWname,
+        wurl: newWurl
+    });
+    setNewWname("");
+    setNewWurl("");
+    window.location = window.location;
+  };
+
+  const Setpage = (num) => {
+    if (num>=1 && num<=maxpage){
+      setPagenum(num);
+    }
+  };
+
+  const Selectpage = (e) => {
+    var edValue = document.getElementById("pagenum");
+    var s = edValue.value;
+    console.log("e=",e.KeyCode);
+    if (e.KeyCode === 13){
+      console.log("s=",s);
+      e.preventDefault();
+      setPagenum(s);
+    }
+  };
+
+  return (
+    <div className="App">
+      <h1> CRUD Application </h1>
+      <div className="form">
+        <label> Website ID: </label>
+        <input type="text" name="wid" onChange={(e) => {
+            setWid(e.target.value)
+        }}/>
+        <label> Website Name: </label>
+        <input type="text" name="wname" onChange={(e) => {
+            setWname(e.target.value)
+        }}/>
+        <label> Website Url: </label>
+        <input type="text" name="wurl" onChange={(e) => {
+            setWurl(e.target.value)
+        }}/>
+
+        <button onClick={submitInsert}> Insert </button>
+        <button onClick={submitSearch}> Search </button>
+        
+        <br />
+        <div>
+          <button onClick={() => {Setpage(pagenum-1)}}> &lt; </button>
+          <input type="number" id="pagenum" defaultValue={pagenum} min="1" max={maxpage} onKeyUp={(event) =>
+          {Selectpage(event)}}/>
+          <button onClick={() => {Setpage(pagenum+1)}}> &gt; </button>
+          <label> {maxpage} </label>
+        </div>
+        {
+        websiteList.map((val,ind) => {
+          if (ind < pagenum * pageiter && ind >= (pagenum-1) * pageiter){
+          return (
+            <div className="list">
+              <p>
+                <b> Website ID: {val.website_id} <br />
+                    Number of Products available: {val.numProd}</b> <br /> <br />
+                    Website Name: {val.website_name} <br />
+                    Website Url: {val.website_url} 
+              </p>
+              <button onClick={() => { deleteWebsite(val.website_id) }}> Delete</button>
+              <input type="text" id="newWname" onChange={(e) => {
+                setNewWname(e.target.value)
+              } }/>
+              <input type="text" id="newWurl" onChange={(e) => {
+                setNewWurl(e.target.value)
+              } }/>
+              <button onClick={() => {
+                updateWebsite(val.website_id)
+              }}> Update</button>
+            </div>
+          );
+          }
+          else return "";
+          
+          ;
+        })
+        }
+      </div>
+    </div>
+  );
+}
+
+export default App;
