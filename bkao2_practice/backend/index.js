@@ -60,6 +60,17 @@ app.get("/api/login", (require, response) => {
     });
 });
 
+app.post("/api/signup/", (require, response) => {
+    const username = require.body.username;
+    const password = require.body.password;
+    const email = require.body.email;
+    const phoneNumber = require.body.phoneNumber;
+    const sqlInsert = "INSERT INTO User (username, password, email, phone_num) VALUES (?,?,?,?)";
+    db.query(sqlInsert, [username, password, email, phoneNumber], (err, result) => {
+        console.log(result);
+    })
+});
+
 app.post("/api/insert", (require, response) => {
     const wid = require.body.wid;
     const wname = require.body.wname;
