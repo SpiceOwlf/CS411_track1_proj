@@ -3,123 +3,104 @@ import React, {useState, useEffect} from "react";
 import Axios from 'axios';
 
 function App() {
-  const [productName, setProductName] = useState('');
-  const [productId, setProductId] = useState('');
-  const [productData, setProductData] = useState([]);
-  const [leftInStock, setLeftInStock] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [website, setWebsite] = useState('');
-  const [newLeftInStock, setNewLeftInStock] = useState('');
-  const [newProductName, setNewProductName] = useState('');
-  const [user, setUser] = useState('');
-  const [userData, setUserData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [badPassword, setBadPassword] = useState(false)
 
-  const getProduct = (productName) => {
-    Axios.get(`http://localhost:3002/api/get/${productName}`).then((response) => {
-      setProductData(response.data)
+  const login = () => {
+    Axios.get(`http://localhost:3002/api/login/${username}`)
+    .then((response) => {
+      response.data.map((val => {
+        if (password == val.password) {
+          setPage(3);
+        }
+      }))
     });
-  };
+    setBadPassword(true);
+  }
 
-  const deleteProduct = (productId) => {
-    Axios.delete(`http://localhost:3002/api/delete/${productId}`);
-  };
-
-  const updateStock = (productId) => {
-    Axios.put(`http://localhost:3002/api/update`, {
-      productId: productId,
-      leftInStock: newLeftInStock
-    });
-    setNewLeftInStock("")
-  };
-
-  const insertProduct = () => {
-    Axios.post(`http://localhost:3002/api/insert`, {
-      productId: productId,
-      productName: newProductName,
-      leftInStock: leftInStock,
-      productPrice: productPrice,
-      website: website
+  const signup = () => {
+    Axios.post(`http://localhost:3002/api/signup`, {
+      username: username,
+      password: password,
+      email: email,
+      phoneNumber: phoneNumber,
     }).then(() => {
       alert('successful insertion!')
     });
-  };
+  }
 
-  const getUserData = (user) => {
-    Axios.get(`http://localhost:3002/api/advanced/${user}`).then((response) => {
-      setUserData(response.data)
-    });
-  };
-
-  return (
-    <div className="App">
-      <h1> CRUD for Product table </h1>
-      <h2> search </h2>
+  if (page == 1) {
+    return (
+      <div className="App">
+      <h1 style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}> Login </h1>
       <div className="form">
-        <label> Product Name: </label>
-        <input type="text" name="productName" onChange={(e) => {
-          setProductName(e.target.value)
-        }}/>
-        <button onClick={getProduct(productName)}> Search </button>
-        {productData.map((val) => {
-          return (
-            <div className = "card">
-              <h3>Product Name: {val.product_name} </h3>
-              <p>Left In Stock: {val.Left_in_stock}</p>
-              <p>Product Price: {val.product_price}</p>
-              <p>Website: {val.website_name}</p>
-              <button onClick={() => { deleteProduct(val.product_id) }}> Delete Product</button>
-              <input type="text" id="updateLeftInStock" onChange={(e) => {
-                setNewLeftInStock(e.target.value)
-              } }/>
-              <button onClick={() => { updateStock(val.product_id) }}> Update Left In Stock</button>
-            </div>
-          );
-        })}
-      </div>
-      <div>
-      <h2> insert </h2>
-      <label> Product ID: </label>
-        <input type="text" id="insertProductId" onChange={(e) => {
-          setProductId(e.target.value)
-        }}/>
-      <label> Product Name: </label>
-        <input type="text" id="insertProductName" onChange={(e) => {
-          setNewProductName(e.target.value)
-        }}/>
-      <label> Left In Stock: </label>
-         <input type="text" id="insertLeftInStock" onChange={(e) => {
-          setLeftInStock(e.target.value)
-        }}/>
-      <label> Price: </label>
-         <input type="text" id="insertProductPrice" onChange={(e) => {
-          setProductPrice(e.target.value)
-        }}/>
-      <label> Website ID: </label>
-         <input type="text" id="insertWebsite" onChange={(e) => {
-          setWebsite(e.target.value)
-      }}/>
-      <button onClick={() => { insertProduct() }}> Insert</button>
-      </div>
-
-      <div>
-      <h2> last items added to user's wishlist </h2>
-      <label> User ID: </label>
-        <input type="text" id="user_id" onChange={(e) => {
-          setUser(e.target.value)
-        }}/>
-      
-      <button onClick={ () => {getUserData(user)} }> Submit </button>
-      {userData.map((val) => {
-          return (
-            <div className = "card2">
-              <h3>Product Name: {val.product_name} </h3>
-              <p>Add Date: {val.add_date}</p>
-            </div>
-          );
-        })}
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
+          <label> Username: </label>
+          <input type="text" name="Username" onChange={(e) => {
+            setUsername(e.target.value)
+          }}/>
+        </div>
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
+          <label> Password: </label>
+          <input type="text" name="Password" onChange={(e) => {
+            setPassword(e.target.value)
+          }}/>
+        </div>
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+          {badPassword ? <p> Incorrect username or password.</p> : null}
+        </div>
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
+          <div style={{padding: 10}}><button onClick={() => login()}> Login </button></div>
+          <div style={{padding: 10}}><button onClick={() => setPage(2)}> Sign Up As A New User</button></div>
+        </div>
       </div>
     </div>
-  );
+    );
+  } else if (page == 2) {
+    return (
+      <div className="App">
+      <h1 style={{display: "flex", justifyContent: "center", alignItems: "center"}}> Sign Up </h1>
+      <div className="form">
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}> 
+          <label> Username: </label>
+          <input type="text" name="Username" onChange={(e) => {
+            setUsername(e.target.value)
+          }}/>
+        </div>
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
+          <label> Password: </label>
+          <input type="text" name="Password" onChange={(e) => {
+            setPassword(e.target.value)
+          }}/>
+        </div>
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <label> Email: </label>
+        <input type="text" name="Email" onChange={(e) => {
+          setEmail(e.target.value)
+        }}/>
+        </div>
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <label> Phone Number: </label>
+        <input type="text" name="PhoneNumber" onChange={(e) => {
+          setPhoneNumber(e.target.value)
+        }}/>
+        </div>
+        <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <div style={{padding: 10}}><button onClick={() => signup()}> Sign Up </button></div>
+        <div style={{padding: 10}}><button onClick={() => setPage(1)}> Go Back To Login </button></div>
+        </div>
+      </div>
+      </div>
+    );
+  } else {
+    return (
+      <h3>user info</h3> 
+    );
+  }
 }
 
 export default App;

@@ -76,6 +76,28 @@ app.get("/api/advanced/:userId", (require, response) => {
     })
 });
 
+app.get("/api/login/:username", (require, response) => {
+    console.log("logging in")
+    const username = require.params.username;
+    const sqlSelect = "SELECT password FROM User WHERE username = ?";
+    db.query(sqlSelect, [username], (err, result) => {
+        console.log(username);
+        console.log(result);
+        response.send(result);
+    })
+});
+
+app.post("/api/signup/", (require, response) => {
+    const username = require.body.username;
+    const password = require.body.password;
+    const email = require.body.email;
+    const phoneNumber = require.body.phoneNumber;
+    // need to handle creation of user id 
+    const sqlInsert = "INSERT INTO User (username, password, email, phone_num) VALUES (?,?,?,?)";
+    db.query(sqlInsert, [username, password, email, phoneNumber], (err, result) => {
+        console.log(result);
+    })
+});
 
 
 
