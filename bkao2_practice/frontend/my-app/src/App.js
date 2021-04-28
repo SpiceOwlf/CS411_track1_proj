@@ -124,6 +124,9 @@ function Nav() {
           <Link to="/">Home</Link>
         </h3>
         <ul className="nav-links">
+            <li>
+            <Link to="/wishlist">wishlist</Link>
+            </li>
           <li>
             <label>Welcome! </label>
             <Link to="/userinfo">{auth.user.username}</Link>
