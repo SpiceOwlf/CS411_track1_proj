@@ -49,6 +49,18 @@ app.get("/api/search", (require, response) => {
     });
 });
 
+app.get("/api/product_search", (require, response) => {
+    const name = !!require.query.pname?"%"+require.query.pname+"%":"%";
+
+    console.log(name);
+    let sqlSelect = `Select * FROM Product NATURAL JOIN Website
+    WHERE product_name
+    like ?;`;
+    db.query(sqlSelect, [name], (err, result) => {
+        response.send(result);
+    });
+});
+
 app.get("/api/login", (require, response) => {
     const username = require.query.username;
     const password = require.query.password;
