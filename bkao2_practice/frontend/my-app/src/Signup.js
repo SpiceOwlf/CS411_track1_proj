@@ -49,9 +49,9 @@ function Signup() {
       </div>
       <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
       <div style={{padding: 10}}><button onClick={() => signup()}> Sign Up </button></div>
+      </div>
       <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
           {success ? <p> Sign Up Successful.</p> : null}
-      </div>
       </div>
     </div>
     </div>
