@@ -49,15 +49,16 @@ function Home() {
     
 
 
-
+     console.log(wishlistitem);
     return (
         <div className = "App">
         <h1>Main page</h1>
-        {/* <label> Wishlist Items </label> */}
+      
         <br></br>
-        {/* Wishlist: {wishlistitem} */}
+        
         {wishlistitem.map((val)=>{
-            console.log(val);
+            // console.log("in dom element, val " + val.product_id);
+            // console.log(val);
             return(
                 <div className = "card">
                       <p> Wishlist Item: {val.product_id} </p>
