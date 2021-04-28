@@ -50,10 +50,6 @@ function useProvideAuth() {
         }
     });
     return u;
-    //return (() => {
-      //setUser(u);
-      //console.log(Object.keys(user));
-    //});
   };
 
   const signout = () => {

@@ -15,18 +15,12 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-/*
-app.get('/', (require, response) => {
-    const sqlInsert = "INSERT INTO `Customer` (`name`, `addr`, `phone`) VALUES ('bbb', 'illini', '777-777-7777');"
-    db.query(sqlInsert, (error, result) => {
-        response.send("Insert successful!!!");
-    })
-})
-*/
 
 app.get("/api/get/", (require, response) => {
     const sqlSelect = require.query.sql;
     db.query(sqlSelect, (err, result) => {
+        console.log("!!!backend!!!");
+        console.log(result);
         response.send(result);
     });
 });
