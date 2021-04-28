@@ -34,22 +34,24 @@ function Home() {
         }).then((response) => {
             (response.data).forEach((val,ind) => {
                 console.log("val is: " + val.product_id);
-
-                setwishlistitem([
-                    ...wishlistitem,
-                    {
-                        product_id: val.product_id,
-                        add_date: val.add_date,
-                        priority: val.priority
-                    }
-                ]);
+                setwishlistitem(wishlistitem=>[...wishlistitem, val]);
+                // setwishlistitem([
+                //     ...wishlistitem,
+                //     {
+                //         product_id: val.product_id,
+                //         add_date: val.add_date,
+                //         priority: val.priority
+                //     }
+                // ]);
+                console.log("wishlistitem is");
+                console.log(wishlistitem);
             })
         })
     },[auth.user])
     
 
 
-     console.log(wishlistitem);
+    //  console.log(wishlistitem);
     return (
         <div className = "App">
         <h1>Main page</h1>
