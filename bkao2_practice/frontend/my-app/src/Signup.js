@@ -10,11 +10,9 @@ function Signup() {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const signup = () => {
-    Axios.post(`http://localhost:3002/api/signup`, {
-      username: username,
-      password: password,
-      email: email,
-      phoneNumber: phoneNumber,
+    const req = "INSERT INTO User (username, password, email, phone_num) VALUES (\"" + username + "\",\"" + password + "\",\"" + email + "\",\"" + phoneNumber + "\")";
+    Axios.get(`http://localhost:3002/api/get`, {
+      params: {sql: req}
     });
   }
 

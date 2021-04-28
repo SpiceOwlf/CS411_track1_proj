@@ -26,8 +26,10 @@ app.get('/', (require, response) => {
 
 app.get("/api/get/", (require, response) => {
     const sqlSelect = require.query.sql;
+    console.log(sqlSelect);
     db.query(sqlSelect, (err, result) => {
         response.send(result);
+        console.log(result);
     });
 });
 
@@ -58,17 +60,6 @@ app.get("/api/login", (require, response) => {
     db.query(sqlSelect, [username,password], (err, result) => {
         response.send(result);
     });
-});
-
-app.post("/api/signup/", (require, response) => {
-    const username = require.body.username;
-    const password = require.body.password;
-    const email = require.body.email;
-    const phoneNumber = require.body.phoneNumber;
-    const sqlInsert = "INSERT INTO User (username, password, email, phone_num) VALUES (?,?,?,?)";
-    db.query(sqlInsert, [username, password, email, phoneNumber], (err, result) => {
-        console.log(result);
-    })
 });
 
 app.post("/api/insert", (require, response) => {
