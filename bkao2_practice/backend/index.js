@@ -26,10 +26,8 @@ app.get('/', (require, response) => {
 
 app.get("/api/get/", (require, response) => {
     const sqlSelect = require.query.sql;
-    console.log(sqlSelect);
     db.query(sqlSelect, (err, result) => {
         response.send(result);
-        console.log(result);
     });
 });
 

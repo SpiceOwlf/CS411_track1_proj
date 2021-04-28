@@ -8,11 +8,14 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const signup = () => {
     const req = "INSERT INTO User (username, password, email, phone_num) VALUES (\"" + username + "\",\"" + password + "\",\"" + email + "\",\"" + phoneNumber + "\")";
     Axios.get(`http://localhost:3002/api/get`, {
       params: {sql: req}
+    }).then((response) => {
+      if (response.data != "") setSuccess(true);
     });
   }
 
@@ -46,6 +49,9 @@ function Signup() {
       </div>
       <div style={{padding: 10, display: "flex", justifyContent: "center", alignItems: "center"}}>
       <div style={{padding: 10}}><button onClick={() => signup()}> Sign Up </button></div>
+      <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+          {success ? <p> Sign Up Successful.</p> : null}
+      </div>
       </div>
     </div>
     </div>
