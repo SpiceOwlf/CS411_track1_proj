@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Userinfo from './Userinfo.js';
 import Notification from './Notification.js'
 import Home from './Home.js';
+import Wishlist from './Wishlist.js';
 
 const Main = () => {
   return (
@@ -10,8 +11,10 @@ const Main = () => {
       <Route exact path='/' component={Home}></Route>
       <Route exact path='/notification' component={Notification}></Route>
       <Route exact path='/userinfo' component={Userinfo}></Route>
+      <Route exact path='/wishlist' component={Wishlist}></Route>
     </Switch>
   );
 }
+
 
 export default Main;
