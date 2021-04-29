@@ -129,6 +129,9 @@ function Nav() {
         </h3>
         <ul className="nav-links">
           <li>
+            <Link to="/notification">Notification Center</Link>
+          </li>
+          <li>
             <label>Welcome! </label>
             <Link to="/userinfo">{auth.user.username}</Link>
           </li>
