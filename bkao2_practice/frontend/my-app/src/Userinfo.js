@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import {Link} from 'react-router-dom';
+//import {Link} from 'react-router-dom';
 import Axios from 'axios';
 import { useAuth } from "./App.js";
 
@@ -15,6 +15,7 @@ function Userinfo() {
     const [email, setEmail] = useState('');
     const [newEM, setNewEM] = useState('');
     const [wishlist, setWL] = useState('');
+    const [reload, setReload] = useState(true);
     let auth = useAuth();
 
     useEffect(() => {
@@ -34,7 +35,7 @@ function Userinfo() {
                 setWL(val.wishlist_id);
             })
         })
-    },[auth.user])
+    },[auth.user, reload])
 
     const updateUser = () => {
         let is_first_attribute=true;
@@ -62,6 +63,13 @@ function Userinfo() {
         Axios.put(`http://localhost:3002/api/update`, {
             sql: sql
         });
+
+        //document.getElementById("pagenum");
+        setNewUN("");
+        setNewPW("");
+        setNewPN("");
+        setNewEM("");
+        setReload(!reload);
     }
 
     return (

@@ -58,8 +58,18 @@ app.get("/api/login", (require, response) => {
     const password = require.query.password;
 
     console.log(username,password);
-    const sqlSelect = "Select * FROM User WHERE username=? and password=?"
+    const sqlSelect = "Select * FROM User WHERE username=? and password=?";
     db.query(sqlSelect, [username,password], (err, result) => {
+        response.send(result);
+    });
+});
+
+app.get("/api/wishlist_check", (require, response) => {
+    const wishlist_id = require.query.wishlist_id;
+    const product_id = require.query.product_id;
+
+    const sqlSelect = "Select * FROM Contains WHERE wishlist_id=? and product_id=?";
+    db.query(sqlSelect, [wishlist_id, product_id], (error, result) => {
         response.send(result);
     });
 });
@@ -74,6 +84,22 @@ app.post("/api/insert", (require, response) => {
         console.log(error);
     });
 });
+
+app.post("/api/contains_insert_new", (require, response) => {
+    const wishlist_id = require.body.wishlist_id;
+    const product_id = require.body.product_id;
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const add_date = yyyy + '-' + mm + '-' + dd;
+    console.log(wishlist_id, product_id, add_date);
+    const sqlInsert = "INSERT INTO `Contains` (wishlist_id, product_id, add_date) VALUES (?, ?, ?);";
+    db.query(sqlInsert, [wishlist_id, product_id, add_date], (error, result)=> {
+        console.log(error);
+    });
+})
 
 app.post("/api/contains_insert", (require, response) => {
     const wishlist_id = require.body.wishlist_id;

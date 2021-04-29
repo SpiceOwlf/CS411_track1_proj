@@ -4,6 +4,7 @@ import Userinfo from './Userinfo.js';
 import Notification from './Notification.js'
 import Home from './Home.js';
 import Wishlist from './Wishlist.js';
+import Productinfo from './Productinfo';
 
 const Main = () => {
   return (
@@ -12,9 +13,9 @@ const Main = () => {
       <Route exact path='/notification' component={Notification}></Route>
       <Route exact path='/userinfo' component={Userinfo}></Route>
       <Route exact path='/wishlist' component={Wishlist}></Route>
+      <Route exact Path='/productinfo/:id'><Productinfo /></Route>
     </Switch>
   );
 }
-
 
 export default Main;
