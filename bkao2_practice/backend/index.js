@@ -76,17 +76,30 @@ app.post("/api/insert", (require, response) => {
 });
 
 app.post("/api/contains_insert", (require, response) => {
-    const user_id = require.body.user_id;
+    const wishlist_id = require.body.wishlist_id;
     const product_id = require.body.product_id;
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    const add_date = yyyy + '-' + mm + '-' + dd
-    console.log(user_id, product_id, add_date);
-    const sqlInsert = "INSERT INTO `Contains` (wishlist_id, product_id, add_date) VALUES (?, ?, ?);";
-    db.query(sqlInsert, [user_id, product_id, add_date], (error, result)=> {
-        console.log(error);
+    var exist = false;
+
+    const sqlSelect = "SELECT * FROM `Contains` WHERE wishlist_id=? AND product_id = ?;";
+    db.query(sqlSelect, [wishlist_id, product_id], (error, result) => {
+        if (result.length > 0){
+            console.log(1)
+            exist = true;
+        }
+        console.log("length: " + result.length)
+        console.log("exist: " + exist)
+        if (!exist){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            const add_date = yyyy + '-' + mm + '-' + dd
+            console.log(wishlist_id, product_id, add_date);
+            const sqlInsert = "INSERT INTO `Contains` (wishlist_id, product_id, add_date) VALUES (?, ?, ?);";
+            db.query(sqlInsert, [wishlist_id, product_id, add_date], (error, result)=> {
+                console.log(error);
+            });
+        }
     });
 });
 

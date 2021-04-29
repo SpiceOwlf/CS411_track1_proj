@@ -56,7 +56,7 @@ function Home() {
   
     const AddToWishlist = (product_id) => {
         Axios.post(`http://localhost:3002/api/contains_insert`, {
-            user_id: auth.user.wishlist_id,
+            wishlist_id: auth.user.wishlist_id,
             product_id: product_id
         }).then(() => {
             alert('Successfully added to your wishlist!')

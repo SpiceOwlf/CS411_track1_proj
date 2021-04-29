@@ -125,7 +125,7 @@ function Nav() {
         </h3>
         <ul className="nav-links">
             <li>
-            <Link to="/wishlist">wishlist</Link>
+            <Link to="/wishlist">Wishlist</Link>
             </li>
           <li>
             <Link to="/notification">Notification Center</Link>
