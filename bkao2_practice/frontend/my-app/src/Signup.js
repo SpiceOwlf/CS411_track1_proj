@@ -15,7 +15,11 @@ function Signup() {
     Axios.get(`http://localhost:3002/api/get`, {
       params: {sql: req}
     }).then((response) => {
-      if (response.data != "") setSuccess(true);
+      if (response.data != "") {
+        setSuccess(true);
+      } else {
+        setSuccess(false);
+      }
     });
   }
 
