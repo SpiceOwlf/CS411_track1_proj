@@ -50,10 +50,6 @@ function useProvideAuth() {
         }
     });
     return u;
-    //return (() => {
-      //setUser(u);
-      //console.log(Object.keys(user));
-    //});
   };
 
   const signout = () => {
@@ -128,6 +124,9 @@ function Nav() {
           <Link to="/">Home</Link>
         </h3>
         <ul className="nav-links">
+            <li>
+            <Link to="/wishlist">wishlist</Link>
+            </li>
           <li>
             <Link to="/notification">Notification Center</Link>
           </li>

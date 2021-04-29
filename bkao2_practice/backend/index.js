@@ -15,14 +15,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-/*
-app.get('/', (require, response) => {
-    const sqlInsert = "INSERT INTO `Customer` (`name`, `addr`, `phone`) VALUES ('bbb', 'illini', '777-777-7777');"
-    db.query(sqlInsert, (error, result) => {
-        response.send("Insert successful!!!");
-    })
-})
-*/
 
 app.get("/api/get/", (require, response) => {
     const sqlSelect = require.query.sql;
@@ -107,6 +99,17 @@ app.delete("/api/delete/:wid", (require, response) => {
         console.log(err);
     })
 });
+
+app.put("/api/deleteContains", (require, response) =>{
+    const delete_sql = require.body.sql;
+    console.log(delete_sql);
+    db.query(delete_sql,(err, result) =>{
+        if(err){
+            console.log(err);
+        }
+    })
+})
+
 
 app.put("/api/update/", (require, response) => {
     /*
