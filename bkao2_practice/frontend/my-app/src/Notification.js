@@ -71,7 +71,7 @@ function Notification() {
             <div className="list">
               <p>
                 <b> Subject: {val.subject} <br /></b> <br /> <br />
-                    {val.website_name} <br />
+                    {val.content} <br />
               </p>
             </div>
           );
