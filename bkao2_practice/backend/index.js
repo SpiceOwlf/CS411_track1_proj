@@ -83,6 +83,21 @@ app.post("/api/insert", (require, response) => {
     });
 });
 
+app.post("/api/contains_insert", (require, response) => {
+    const user_id = require.body.user_id;
+    const product_id = require.body.product_id;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const add_date = yyyy + '-' + mm + '-' + dd
+    console.log(user_id, product_id, add_date);
+    const sqlInsert = "INSERT INTO `Contains` (wishlist_id, product_id, add_date) VALUES (?, ?, ?);";
+    db.query(sqlInsert, [user_id, product_id, add_date], (error, result)=> {
+        console.log(error);
+    });
+});
+
 app.delete("/api/delete/:wid", (require, response) => {
     const wid = require.params.wid;
     console.log("website is    "+ wid);
