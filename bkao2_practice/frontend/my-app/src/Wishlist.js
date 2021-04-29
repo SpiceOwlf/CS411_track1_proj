@@ -12,7 +12,7 @@ function Wishlist(){
 
     useEffect(() => {
 
-        let sql = "SELECT * FROM Contains WHERE wishlist_id=" + auth.user.wishlist_id;
+        let sql = "SELECT * FROM Contains WHERE wishlist_id=" + auth.user.wishlist_id + " ORDER BY priority";
         console.log(sql);
         Axios.get(`http://localhost:3002/api/get`, {
             params: {
@@ -33,8 +33,7 @@ function Wishlist(){
 
 
     const deleteFromContain = (wishlist_id, product_id) =>{
-        
-        let sql = "DELETE FROM Contains WHERE wishlist_id =" + wishlist_id +" AND product_id = \""+product_id +"\"";
+       let sql = "DELETE FROM Contains WHERE wishlist_id =" + wishlist_id +" AND product_id = \""+product_id +"\"";
         setdeletsql(product_id);
         console.log(sql);
         Axios.put(`http://localhost:3002/api/deleteContains`,{       
@@ -44,7 +43,6 @@ function Wishlist(){
 
         
         setwishlistitem(wishlistitem.filter(val => val.product_id !== product_id));
-
     };
 
     return (
@@ -61,7 +59,6 @@ function Wishlist(){
                     {/* <p>Wishlist id:{val.wishlist_id} </p> */}
                       <p> Wishlist Item: {val.product_id} </p>
                       <p>  add_date:{val.add_date} </p>
-                      <p> priority: {val.priority} </p>
                       {/* <button> Delete</button> */}
                       
                       <button onClick={() => {deleteFromContain(val.wishlist_id, val.product_id) }}> Delete</button>
