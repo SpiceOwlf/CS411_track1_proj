@@ -19,8 +19,6 @@ app.use(express.json());
 app.get("/api/get/", (require, response) => {
     const sqlSelect = require.query.sql;
     db.query(sqlSelect, (err, result) => {
-        console.log("!!!backend!!!");
-        console.log(result);
         response.send(result);
     });
 });
@@ -74,6 +72,17 @@ app.delete("/api/delete/:wid", (require, response) => {
         console.log(err);
     })
 });
+
+app.put("/api/deleteContains", (require, response) =>{
+    const delete_sql = require.body.sql;
+    console.log(delete_sql);
+    db.query(delete_sql,(err, result) =>{
+        if(err){
+            console.log(err);
+        }
+    })
+})
+
 
 app.put("/api/update/", (require, response) => {
     /*
