@@ -4,6 +4,8 @@ const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
 
+app.use(express.static(__dirname + '/public/build'));
+
 var db = mysql.createConnection({
     host:'35.184.123.230',
     user:'root',
