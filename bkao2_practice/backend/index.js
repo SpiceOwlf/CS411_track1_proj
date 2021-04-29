@@ -15,14 +15,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-/*
-app.get('/', (require, response) => {
-    const sqlInsert = "INSERT INTO `Customer` (`name`, `addr`, `phone`) VALUES ('bbb', 'illini', '777-777-7777');"
-    db.query(sqlInsert, (error, result) => {
-        response.send("Insert successful!!!");
-    })
-})
-*/
 
 app.get("/api/get/", (require, response) => {
     const sqlSelect = require.query.sql;
@@ -66,8 +58,18 @@ app.get("/api/login", (require, response) => {
     const password = require.query.password;
 
     console.log(username,password);
-    const sqlSelect = "Select * FROM User WHERE username=? and password=?"
+    const sqlSelect = "Select * FROM User WHERE username=? and password=?";
     db.query(sqlSelect, [username,password], (err, result) => {
+        response.send(result);
+    });
+});
+
+app.get("/api/wishlist_check", (require, response) => {
+    const wishlist_id = require.query.wishlist_id;
+    const product_id = require.query.product_id;
+
+    const sqlSelect = "Select * FROM Contains WHERE wishlist_id=? and product_id=?";
+    db.query(sqlSelect, [wishlist_id, product_id], (error, result) => {
         response.send(result);
     });
 });
@@ -83,18 +85,47 @@ app.post("/api/insert", (require, response) => {
     });
 });
 
-app.post("/api/contains_insert", (require, response) => {
-    const user_id = require.body.user_id;
+app.post("/api/contains_insert_new", (require, response) => {
+    const wishlist_id = require.body.wishlist_id;
     const product_id = require.body.product_id;
+
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    const add_date = yyyy + '-' + mm + '-' + dd
-    console.log(user_id, product_id, add_date);
+    const add_date = yyyy + '-' + mm + '-' + dd;
+    console.log(wishlist_id, product_id, add_date);
     const sqlInsert = "INSERT INTO `Contains` (wishlist_id, product_id, add_date) VALUES (?, ?, ?);";
-    db.query(sqlInsert, [user_id, product_id, add_date], (error, result)=> {
+    db.query(sqlInsert, [wishlist_id, product_id, add_date], (error, result)=> {
         console.log(error);
+    });
+})
+
+app.post("/api/contains_insert", (require, response) => {
+    const wishlist_id = require.body.wishlist_id;
+    const product_id = require.body.product_id;
+    var exist = false;
+
+    const sqlSelect = "SELECT * FROM `Contains` WHERE wishlist_id=? AND product_id = ?;";
+    db.query(sqlSelect, [wishlist_id, product_id], (error, result) => {
+        if (result.length > 0){
+            console.log(1)
+            exist = true;
+        }
+        console.log("length: " + result.length)
+        console.log("exist: " + exist)
+        if (!exist){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            const add_date = yyyy + '-' + mm + '-' + dd
+            console.log(wishlist_id, product_id, add_date);
+            const sqlInsert = "INSERT INTO `Contains` (wishlist_id, product_id, add_date) VALUES (?, ?, ?);";
+            db.query(sqlInsert, [wishlist_id, product_id, add_date], (error, result)=> {
+                console.log(error);
+            });
+        }
     });
 });
 
@@ -107,6 +138,17 @@ app.delete("/api/delete/:wid", (require, response) => {
         console.log(err);
     })
 });
+
+app.put("/api/deleteContains", (require, response) =>{
+    const delete_sql = require.body.sql;
+    console.log(delete_sql);
+    db.query(delete_sql,(err, result) =>{
+        if(err){
+            console.log(err);
+        }
+    })
+})
+
 
 app.put("/api/update/", (require, response) => {
     /*

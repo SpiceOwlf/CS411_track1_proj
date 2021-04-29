@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import { useAuth } from "./App.js";
 
@@ -56,13 +56,13 @@ function Home() {
   
     const AddToWishlist = (product_id) => {
         Axios.post(`http://localhost:3002/api/contains_insert`, {
-            user_id: auth.user.wishlist_id,
+            wishlist_id: auth.user.wishlist_id,
             product_id: product_id
         }).then(() => {
             alert('Successfully added to your wishlist!')
         });
     };
-  
+
     return (
       <div className="App">
       <h1> Main Page </h1>
@@ -89,7 +89,9 @@ function Home() {
           return (
             <div className="list">
               <p>
-                <b> Product Name: {val.product_name} <br />
+                <b> Product: 
+                      <Link to={"/productinfo/"+val.product_id}>
+                        {val.product_name}</Link> <br />
                     Price: {val.product_price}</b> <br /> <br />
                     From: {val.website_name} <br />
                     Website Url: {val.website_url} 
